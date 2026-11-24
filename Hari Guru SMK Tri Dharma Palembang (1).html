@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hari Guru Nasional — SMK Tri Dharma Palembang</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#1e3a8a',
+                            900: '#0f172a',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Alpine.js for lightweight reactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0284c7;
+            border-radius: 4px;
+        }
+        /* Crop image adjustment for mobile screenshots */
+        .crop-portrait {
+            object-fit: cover;
+            object-position: center 22%;
+        }
+        .crop-top-center {
+            object-fit: cover;
+            object-position: center 15%;
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-500 selection:text-white" x-data="appData()">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 glass-nav border-b border-sky-100 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-xl bg-white p-1 shadow-md border border-sky-100 flex items-center justify-center">
+                    <img src="1000792510.png" alt="Logo SMK Tri Dharma Palembang" class="max-h-full max-w-full object-contain" onerror="this.src='https://placehold.co/100x100/e0f2fe/0369a1?text=SMK+TD'">
+                </div>
+                <div>
+                    <span class="block text-xs font-bold uppercase tracking-wider text-brand-600">Website Resmi Hari Guru</span>
+                    <h1 class="text-lg font-extrabold text-brand-900 leading-tight">SMK Tri Dharma Palembang</h1>
+                </div>
+            </div>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
+                <a href="#beranda" class="hover:text-brand-600 transition">Beranda</a>
+                <a href="#pimpinan" class="hover:text-brand-600 transition">Pimpinan</a>
+                <a href="#galeri" class="hover:text-brand-600 transition">Galeri Guru</a>
+                <a href="#direktori" class="hover:text-brand-600 transition">Direktori Guru</a>
+                <a href="#ucapan" class="hover:text-brand-600 transition">Dinding Ucapan</a>
+            </nav>
+
+            <div class="hidden sm:flex items-center">
+                <a href="#form-ucapan" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-brand-600 to-brand-800 text-white font-medium text-sm shadow-md hover:shadow-lg hover:opacity-95 transition flex items-center gap-2">
+                    <i class="fa-solid fa-heart text-amber-300">="aria-hidden"></i>
+                    <span>Kirim Ucapan</span>
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle Button -->
+            <button @click="mobileMenu = !mobileMenu" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100">
+                <i class="fa-solid" :class="mobileMenu ? 'fa-xmark text-xl' : 'fa-bars text-xl'"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div x-show="mobileMenu" x-transition class="md:hidden bg-white border-b border-slate-100 px-4 pt-2 pb-6 space-y-3">
+            <a @click="mobileMenu = false" href="#beranda" class="block px-3 py-2 rounded-md font-medium hover:bg-slate-50">Beranda</a>
+            <a @click="mobileMenu = false" href="#pimpinan" class="block px-3 py-2 rounded-md font-medium hover:bg-slate-50">Pimpinan & Kesiswaan</a>
+            <a @click="mobileMenu = false" href="#galeri" class="block px-3 py-2 rounded-md font-medium hover:bg-slate-50">Galeri Momen</a>
+            <a @click="mobileMenu = false" href="#direktori" class="block px-3 py-2 rounded-md font-medium hover:bg-slate-50">Direktori 36 Guru</a>
+            <a @click="mobileMenu = false" href="#ucapan" class="block px-3 py-2 rounded-md font-medium hover:bg-slate-50">Dinding Ucapan</a>
+            <a @click="mobileMenu = false" href="#form-ucapan" class="block text-center py-2.5 rounded-xl bg-brand-600 text-white font-semibold">Kirim Ucapan Terima Kasih</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="beranda" class="relative overflow-hidden bg-gradient-to-b from-brand-50 via-white to-slate-50 pt-12 pb-20 lg:pt-20 lg:pb-28">
+        <!-- Decorative SVG background elements -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full pointer-events-none opacity-40">
+            <div class="absolute top-10 left-10 w-72 h-72 bg-brand-200 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-10 right-10 w-96 h-96 bg-amber-100 rounded-full blur-3xl"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto">
+                <!-- Badge -->
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-100 border border-brand-200 text-brand-800 text-xs sm:text-sm font-semibold mb-6 shadow-sm">
+                    <img src="1000792510.png" class="w-5 h-5 object-contain" alt="Logo">
+                    <span>Selamat Hari Guru Nasional</span>
+                    <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                    <span class="text-slate-600">SMK Tri Dharma Palembang</span>
+                </div>
+
+                <!-- Main Heading -->
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
+                    Mendidik dengan Hati, <br class="hidden sm:inline">
+                    <span class="bg-gradient-to-r from-brand-600 via-brand-800 to-amber-600 bg-clip-text text-transparent">
+                        Membangun Masa Depan Vokasi
+                    </span>
+                </h2>
+
+                <!-- Subtitle / Appreciation -->
+                <p class="text-base sm:text-lg text-slate-600 leading-relaxed mb-8">
+                    Terima kasih yang mendalam kepada seluruh bapak dan ibu guru SMK Tri Dharma Palembang. Dedikasi, bimbingan, dan ketulusan kalian adalah pelita yang menerangi jalan para siswa menuju keahlian, karakter unggul, dan kemandirian berkarya.
+                </p>
+
+                <!-- Call to action buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="#direktori" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-base shadow-lg shadow-brand-500/30 hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-users text-amber-300"></i>
+                        <span>Lihat 36 Dewan Guru</span>
+                    </a>
+                    <a href="#form-ucapan" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-brand-900 border border-slate-200 font-bold text-base shadow-md transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-pen-nib text-brand-600"></i>
+                        <span>Tulis Pesan Apresiasi</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- School Quote Banner -->
+            <div class="mt-16 bg-gradient-to-r from-brand-900 via-brand-800 to-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-2xl relative overflow-hidden">
+                <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none translate-x-8 translate-y-8">
+                    <img src="1000792510.png" class="w-80 h-80 object-contain" alt="Watermark Logo">
+                </div>
+                <div class="relative z-10 grid md:grid-cols-12 gap-6 items-center">
+                    <div class="md:col-span-8 space-y-3">
+                        <span class="text-amber-400 font-bold text-sm tracking-widest uppercase flex items-center gap-2">
+                            <i class="fa-solid fa-quote-left text-lg"></i> Pesan Apresiasi Spesial
+                        </span>
+                        <blockquote class="font-serif italic text-lg sm:text-xl text-sky-100 leading-relaxed">
+                            "Guru bukan hanya pengajar di dalam kelas, melainkan arsitek jiwa yang membimbing setiap langkah siswa SMK Tri Dharma Palembang agar siap menaklukkan dunia industri dan berakhlak mulia."
+                        </blockquote>
+                    </div>
+                    <div class="md:col-span-4 flex md:justify-end">
+                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 text-center w-full md:w-auto">
+                            <p class="text-2xl font-black text-amber-300">36+</p>
+                            <p class="text-xs text-sky-100 font-medium">Tenaga Pendidik & Staf</p>
+                            <div class="my-2 border-t border-white/10"></div>
+                            <p class="text-xs text-slate-300">SMK Tri Dharma Palembang</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership Section / Sorotan Pimpinan Sekolah -->
+    <section id="pimpinan" class="py-16 bg-white border-y border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="text-xs font-bold text-brand-600 uppercase tracking-widest mb-2">Pimpinan & Manajemen Sekolah</h2>
+                <h3 class="text-3xl font-extrabold text-slate-900">Jajaran Pimpinan SMK Tri Dharma Palembang</h3>
+                <p class="text-slate-600 text-sm mt-2">Nakhoda utama pembina keunggulan akademis, kedisiplinan, dan sarana prasarana sekolah.</p>
+            </div>
+
+            <!-- Leadership Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Kepala Sekolah (Ibu Yulia Andriani) -->
+                <div class="group bg-gradient-to-b from-sky-50 to-white rounded-2xl p-5 border border-sky-100 shadow-md hover:shadow-xl transition-all duration-300 relative">
+                    <div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-4 shadow-sm bg-slate-100">
+                        <img src="1000799652.jpg" alt="Yulia Andriani, SE, M.Si" class="w-full h-full crop-portrait group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x500/0284c7/fff?text=Kepala+Sekolah'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
+                        <span class="absolute bottom-3 left-3 bg-amber-400 text-slate-900 text-xs font-extrabold px-3 py-1 rounded-full shadow">
+                            Kepala Sekolah
+                        </span>
+                    </div>
+                    <h4 class="font-bold text-slate-900 text-lg group-hover:text-brand-600 transition">Yulia Andriani, SE, M.Si</h4>
+                    <p class="text-sm font-semibold text-brand-600">Kepala SMK Tri Dharma Palembang</p>
+                    <p class="text-xs text-slate-500 mt-2 line-clamp-2">Memimpin transformasi pendidikan vokasi yang berkarakter, inovatif, dan berdaya saing tinggi.</p>
+                    <button @click="openModal('Yulia Andriani, SE, M.Si', 'Kepala Sekolah', '—', '1000799652.jpg', 'Memimpin SMK Tri Dharma Palembang menuju masa depan emas dengan semangat dedikasi tinggi.')" class="mt-4 w-full py-2 bg-brand-50 hover:bg-brand-100 text-brand-700 text-xs font-bold rounded-lg transition flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-expand"></i> Detail Profil
+                    </button>
+                </div>
+
+                <!-- Wakil Kurikulum (Ibu Rizqi Maulidia) -->
+                <div class="group bg-gradient-to-b from-sky-50 to-white rounded-2xl p-5 border border-sky-100 shadow-md hover:shadow-xl transition-all duration-300">
+                    <div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-4 shadow-sm bg-slate-100">
+                        <img src="1000799653.jpg" alt="Rizqi Maulidia, S.E, Gr" class="w-full h-full crop-portrait group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x500/0284c7/fff?text=WK+Kurikulum'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
+                        <span class="absolute bottom-3 left-3 bg-brand-500 text-white text-xs font-extrabold px-3 py-1 rounded-full shadow">
+                            Wakil Kurikulum
+                        </span>
+                    </div>
+                    <h4 class="font-bold text-slate-900 text-lg group-hover:text-brand-600 transition">Rizqi Maulidia, S.E., Gr</h4>
+                    <p class="text-sm font-semibold text-brand-600">WK. Kurikulum & Guru Prodi MP</p>
+                    <p class="text-xs text-slate-500 mt-2 line-clamp-2">Mengawal standar kurikulum berkualitas dan proses pembelajaran berbasis keahlian.</p>
+                    <button @click="openModal('Rizqi Maulidia, S.E., Gr', 'WK. Kurikulum', 'Prodi MP', '1000799653.jpg', 'Pengembang kurikulum unggulan untuk mencetak lulusan terampil dan profesional.')" class="mt-4 w-full py-2 bg-brand-50 hover:bg-brand-100 text-brand-700 text-xs font-bold rounded-lg transition flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-expand"></i> Detail Profil
+                    </button>
+                </div>
+
+                <!-- Wakil Kesiswaan (Ibu Anita Lestari) -->
+                <div class="group bg-gradient-to-b from-sky-50 to-white rounded-2xl p-5 border border-sky-100 shadow-md hover:shadow-xl transition-all duration-300">
+                    <div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-4 shadow-sm bg-slate-100">
+                        <img src="1000799654.jpg" alt="Anita Lestari, S.Pd, Gr" class="w-full h-full crop-portrait group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x500/0284c7/fff?text=WK+Kesiswaan'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
+                        <span class="absolute bottom-3 left-3 bg-brand-500 text-white text-xs font-extrabold px-3 py-1 rounded-full shadow">
+                            Wakil Kesiswaan
+                        </span>
+                    </div>
+                    <h4 class="font-bold text-slate-900 text-lg group-hover:text-brand-600 transition">Anita Lestari, S.Pd., Gr</h4>
+                    <p class="text-sm font-semibold text-brand-600">WK. Kesiswaan</p>
+                    <p class="text-xs text-slate-500 mt-2 line-clamp-2">Membina kedisiplinan, talenta, serta karakter kepemimpinan generasi muda sekolah.</p>
+                    <button @click="openModal('Anita Lestari, S.Pd., Gr', 'WK. Kesiswaan', '—', '1000799654.jpg', 'Membangun karakter siswa yang santun, disiplin, dan berprestasi.')" class="mt-4 w-full py-2 bg-brand-50 hover:bg-brand-100 text-brand-700 text-xs font-bold rounded-lg transition flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-expand"></i> Detail Profil
+                    </button>
+                </div>
+
+                <!-- Wakil Sapras (Ibu Rosalina) -->
+                <div class="group bg-gradient-to-b from-sky-50 to-white rounded-2xl p-5 border border-sky-100 shadow-md hover:shadow-xl transition-all duration-300">
+                    <div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-4 shadow-sm bg-slate-100">
+                        <img src="1000799669.jpg" alt="Rosalina, S.Pd" class="w-full h-full crop-portrait group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x500/0284c7/fff?text=WK+Sapras'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
+                        <span class="absolute bottom-3 left-3 bg-brand-500 text-white text-xs font-extrabold px-3 py-1 rounded-full shadow">
+                            Wakil Sapras
+                        </span>
+                    </div>
+                    <h4 class="font-bold text-slate-900 text-lg group-hover:text-brand-600 transition">Rosalina, S.Pd</h4>
+                    <p class="text-sm font-semibold text-brand-600">WK. Sarana Prasarana</p>
+                    <p class="text-xs text-slate-500 mt-2 line-clamp-2">Mengelola fasilitas dan sarana praktik belajar demi kenyamanan seluruh warga sekolah.</p>
+                    <button @click="openModal('Rosalina, S.Pd', 'WK. Sarana Prasarana', '—', '1000799669.jpg', 'Menjaga kelengkapan fasilitas dan ruang praktek siswa agar optimal.')" class="mt-4 w-full py-2 bg-brand-50 hover:bg-brand-100 text-brand-700 text-xs font-bold rounded-lg transition flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-expand"></i> Detail Profil
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery & Teacher Moments -->
+    <section id="galeri" class="py-16 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+                <div>
+                    <h2 class="text-xs font-bold text-brand-600 uppercase tracking-widest mb-1">Momen Dedikasi & Kesiapan</h2>
+                    <h3 class="text-3xl font-extrabold text-slate-900">Galeri Foto Dewan Guru</h3>
+                </div>
+                <p class="text-sm text-slate-500 mt-2 md:mt-0 max-w-md">Potret keceriaan dan profesionalisme para guru SMK Tri Dharma Palembang saat mendidik dan membimbing siswa.</p>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Photo Card 1: Fajrin Yuliansyah -->
+                <div class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-300 cursor-pointer" @click="openModal('Fajrin Yuliansyah, S.Pd', 'Ka. Jurusan TKR', 'Produktif TKRO', '1000799655.jpg', 'Foto kegiatan belajar mengajar di ruang teori dan praktek Otomotif TKR.')">
+                    <div class="relative h-64 overflow-hidden bg-slate-100">
+                        <img src="1000799655.jpg" alt="Fajrin Yuliansyah, S.Pd" class="w-full h-full crop-portrait group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-3 left-4 right-4 text-white">
+                            <span class="text-[10px] font-bold bg-amber-500 text-slate-900 px-2 py-0.5 rounded">Kepala Jurusan TKR</span>
+                            <h5 class="font-bold text-base mt-1">Fajrin Yuliansyah, S.Pd</h5>
+                            <p class="text-xs text-sky-200">Mata Pelajaran: Produktif TKRO</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photo Card 2: Pandi Ahmad & Mochammad Ghazali -->
+                <div class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-300 cursor-pointer" @click="openModal('Mochammad Ghazali, S.Pd., Gr & Pandi Ahmad, S.Pd', 'Ka. TSM & Guru TSM', 'Produktif TSM', '1000799656.jpg', 'Tim Pengajar Jurusan Teknik Sepeda Motor (TSM) SMK Tri Dharma Palembang.')">
+                    <div class="relative h-64 overflow-hidden bg-slate-100">
+                        <img src="1000799656.jpg" alt="Tim TSM - Pandi Ahmad & Mochammad Ghazali" class="w-full h-full crop-portrait group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-3 left-4 right-4 text-white">
+                            <span class="text-[10px] font-bold bg-brand-500 text-white px-2 py-0.5 rounded">Tim Produktif TSM</span>
+                            <h5 class="font-bold text-base mt-1">M. Ghazali, S.Pd & Pandi Ahmad, S.Pd</h5>
+                            <p class="text-xs text-sky-200">Ka. TSM & Guru Produktif TSM</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photo Card 3: Tim BK -->
+                <div class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-300 cursor-pointer" @click="openModal('Tim Guru Bimbingan Konseling (BK)', 'Guru BK', 'Nila Puspita Sari, S.Pd | Putri Nirwana, S.Pd | Fitri Handayani, S.Sos', '1000799657.jpg', 'Tim Bimbingan Konseling yang selalu siap mendengarkan dan mengarahkan siswa.')">
+                    <div class="relative h-64 overflow-hidden bg-slate-100">
+                        <img src="1000799657.jpg" alt="Tim Bimbingan Konseling" class="w-full h-full crop-portrait group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-3 left-4 right-4 text-white">
+                            <span class="text-[10px] font-bold bg-emerald-500 text-white px-2 py-0.5 rounded">Tim Bimbingan & Konseling</span>
+                            <h5 class="font-bold text-base mt-1">Nila, Putri Nirwana & Fitri Handayani</h5>
+                            <p class="text-xs text-sky-200">Guru BK Pendamping Siswa</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photo Card 4: Lilis Karlina & Wahyudi -->
+                <div class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-300 cursor-pointer" @click="openModal('Lilis Karlina, S.Pd.I., M.Pd & Wahyudi, S.Pd', 'Guru Agama Islam & Mapel Coding', 'Prodi TJKT & PAI', '1000799662.jpg', 'Tim Pendidik Agama Islam dan Keahlian TJKT / Coding di Perpustakaan Sekolah.')">
+                    <div class="relative h-64 overflow-hidden bg-slate-100">
+                        <img src="1000799662.jpg" alt="Lilis Karlina & Wahyudi" class="w-full h-full crop-portrait group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-3 left-4 right-4 text-white">
+                            <span class="text-[10px] font-bold bg-purple-600 text-white px-2 py-0.5 rounded">Tim PAI & Mapel Coding</span>
+                            <h5 class="font-bold text-base mt-1">Lilis Karlina, M.Pd & Wahyudi, S.Pd</h5>
+                            <p class="text-xs text-sky-200">Prodi TJKT, PAI & Coding</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photo Card 5: Audy, S.E -->
+                <div class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-300 cursor-pointer" @click="openModal('Audy, S.E', 'Guru PKK', 'Produk Kreatif & Kewirausahaan', '1000799671.jpg', 'Pendidik mata pelajaran Produk Kreatif dan Kewirausahaan (PKK).')">
+                    <div class="relative h-64 overflow-hidden bg-slate-100">
+                        <img src="1000799671.jpg" alt="Audy, S.E" class="w-full h-full crop-portrait group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-3 left-4 right-4 text-white">
+                            <span class="text-[10px] font-bold bg-rose-500 text-white px-2 py-0.5 rounded">Guru PKK</span>
+                            <h5 class="font-bold text-base mt-1">Audy, S.E</h5>
+                            <p class="text-xs text-sky-200">Mata Pelajaran: PKK / Kewirausahaan</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Card Showcase -->
+                <div class="bg-gradient-to-br from-brand-800 to-brand-900 rounded-2xl p-6 text-white flex flex-col justify-between shadow-lg relative overflow-hidden">
+                    <div class="absolute -right-6 -bottom-6 w-40 h-40 bg-white/5 rounded-full blur-xl pointer-events-none"></div>
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-amber-400 text-slate-900 flex items-center justify-center font-bold mb-4">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <h4 class="font-bold text-xl mb-2">SMK Tri Dharma Palembang</h4>
+                        <p class="text-xs text-sky-200 leading-relaxed">
+                            Mencetak lulusan terampil di bidang Teknik Otomotif (TKRO/TSM), TKJ & Coding, Bisnis Manajemen (MP), serta Akuntansi (AKL).
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-amber-300">
+                        <span>#HariGuruNasional</span>
+                        <span>#VokasiKuatMenguatkanIndonesia</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Complete Directory Section (36 Teachers Data) -->
+    <section id="direktori" class="py-16 bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <h2 class="text-xs font-bold text-brand-600 uppercase tracking-widest mb-1">Daftar Lengkap Tenaga Pendidik</h2>
+                <h3 class="text-3xl font-extrabold text-slate-900">Direktori Dewan Guru & Staf (36 Personel)</h3>
+                <p class="text-slate-600 text-sm mt-2">Cari nama guru, mata pelajaran, atau filter berdasarkan kelompok keahlian.</p>
+            </div>
+
+            <!-- Controls: Search & Category Filter -->
+            <div class="bg-slate-50 p-4 sm:p-6 rounded-2xl border border-slate-200 mb-8 space-y-4 md:space-y-0 md:flex md:items-center md:justify-between gap-4">
+                <!-- Search Input -->
+                <div class="relative flex-1">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" x-model="searchQuery" placeholder="Cari nama guru, jabatan, atau mapel (misal: Yulia, Coding, BK, TKRO)..." class="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition shadow-sm">
+                </div>
+
+                <!-- Category Filters -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <button @click="selectedCategory = 'semua'" :class="selectedCategory === 'semua' ? 'bg-brand-600 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'" class="px-3.5 py-2 rounded-lg text-xs font-bold transition">
+                        Semua (36)
+                    </button>
+                    <button @click="selectedCategory = 'pimpinan'" :class="selectedCategory === 'pimpinan' ? 'bg-brand-600 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'" class="px-3.5 py-2 rounded-lg text-xs font-bold transition">
+                        Pimpinan & Kaprodi
+                    </button>
+                    <button @click="selectedCategory = 'otomotif'" :class="selectedCategory === 'otomotif' ? 'bg-brand-600 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'" class="px-3.5 py-2 rounded-lg text-xs font-bold transition">
+                        Otomotif (TKRO/TSM)
+                    </button>
+                    <button @click="selectedCategory = 'tkj'" :class="selectedCategory === 'tkj' ? 'bg-brand-600 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'" class="px-3.5 py-2 rounded-lg text-xs font-bold transition">
+                        TKJ & Coding
+                    </button>
+                    <button @click="selectedCategory = 'bisnis'" :class="selectedCategory === 'bisnis' ? 'bg-brand-600 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'" class="px-3.5 py-2 rounded-lg text-xs font-bold transition">
+                        Bisnis & AKL/MP
+                    </button>
+                    <button @click="selectedCategory = 'umum'" :class="selectedCategory === 'umum' ? 'bg-brand-600 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'" class="px-3.5 py-2 rounded-lg text-xs font-bold transition">
+                        Mapel Umum & BK
+                    </button>
+                </div>
+            </div>
+
+            <!-- View Switcher & Counter -->
+            <div class="flex items-center justify-between mb-6 text-sm text-slate-600">
+                <p>Menampilkan <span class="font-bold text-brand-700" x-text="filteredTeachers.length"></span> dari 36 entitas guru/staf</p>
+                <div class="flex items-center space-x-2">
+                    <button @click="viewType = 'grid'" :class="viewType === 'grid' ? 'bg-brand-100 text-brand-700' : 'text-slate-400 hover:bg-slate-100'" class="p-2 rounded-lg transition" title="Tampilan Kartu">
+                        <i class="fa-solid fa-border-all text-base"></i>
+                    </button>
+                    <button @click="viewType = 'table'" :class="viewType === 'table' ? 'bg-brand-100 text-brand-700' : 'text-slate-400 hover:bg-slate-100'" class="p-2 rounded-lg transition" title="Tampilan Tabel">
+                        <i class="fa-solid fa-list text-base"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card View Mode -->
+            <div x-show="viewType === 'grid'" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <template x-for="teacher in filteredTeachers" :key="teacher.no">
+                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative group">
+                        <!-- Photo badge status if teacher has photo -->
+                        <div class="flex items-start justify-between mb-3">
+                            <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-xs border border-slate-200" x-text="teacher.no"></span>
+                            <template x-if="teacher.photo">
+                                <span @click="openModal(teacher.nama, teacher.jabatan, teacher.mapel, teacher.photo, 'Foto profil resmi guru')" class="cursor-pointer inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200 hover:bg-emerald-100">
+                                    <i class="fa-solid fa-camera"></i> Ada Foto
+                                </span>
+                            </template>
+                        </div>
+
+                        <!-- Teacher Info -->
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-base leading-snug group-hover:text-brand-600 transition" x-text="teacher.nama"></h4>
+                            
+                            <div class="mt-2 space-y-1">
+                                <p class="text-xs text-slate-500 font-medium flex items-center gap-1.5" x-show="teacher.jabatan !== '—'">
+                                    <i class="fa-solid fa-user-tie text-brand-500 text-[10px]"></i>
+                                    <span class="font-semibold text-slate-700" x-text="teacher.jabatan"></span>
+                                </p>
+                                <p class="text-xs text-slate-500 flex items-start gap-1.5">
+                                    <i class="fa-solid fa-book-open text-amber-500 text-[10px] mt-0.5"></i>
+                                    <span x-text="teacher.mapel !== '—' ? teacher.mapel : 'Tenaga Pendidik / Staf'"></span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Card Action -->
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <a href="#form-ucapan" @click="selectTeacherForWish(teacher.nama)" class="text-xs font-bold text-brand-600 hover:text-brand-800 transition flex items-center gap-1">
+                                <i class="fa-regular fa-paper-plane"></i> Kirim Ucapan
+                            </a>
+                            <template x-if="teacher.photo">
+                                <button @click="openModal(teacher.nama, teacher.jabatan, teacher.mapel, teacher.photo, 'Dokumentasi dewan guru')" class="text-xs text-slate-400 hover:text-slate-600">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Table View Mode -->
+            <div x-show="viewType === 'table'" class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                            <th class="py-3 px-4 w-12 text-center">No</th>
+                            <th class="py-3 px-4">Nama Guru</th>
+                            <th class="py-3 px-4">Jabatan / Tugahan</th>
+                            <th class="py-3 px-4">Mata Pelajaran</th>
+                            <th class="py-3 px-4 text-center">Dokumentasi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <template x-for="teacher in filteredTeachers" :key="teacher.no">
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3 px-4 text-center font-bold text-slate-500 text-xs" x-text="teacher.no"></td>
+                                <td class="py-3 px-4 font-bold text-slate-900" x-text="teacher.nama"></td>
+                                <td class="py-3 px-4 text-slate-600">
+                                    <span class="inline-block px-2.5 py-0.5 rounded text-xs font-semibold" :class="teacher.jabatan !== '—' ? 'bg-sky-100 text-brand-800' : 'text-slate-500'" x-text="teacher.jabatan"></span>
+                                </td>
+                                <td class="py-3 px-4 text-slate-600 text-xs" x-text="teacher.mapel"></td>
+                                <td class="py-3 px-4 text-center">
+                                    <template x-if="teacher.photo">
+                                        <button @click="openModal(teacher.nama, teacher.jabatan, teacher.mapel, teacher.photo, 'Foto Dokumentasi Guru')" class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full hover:bg-emerald-200 transition">
+                                            Lihat Foto
+                                        </button>
+                                    </template>
+                                    <template x-if="!teacher.photo">
+                                        <span class="text-xs text-slate-400 italic">—</span>
+                                    </template>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Note section for unlisted names -->
+            <div class="mt-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-3">
+                <i class="fa-solid fa-circle-info text-amber-600 text-base mt-0.5"></i>
+                <div>
+                    <p class="font-bold">Catatan Data Direktori Guru:</p>
+                    <p class="text-amber-800 mt-0.5">
+                        Beberapa nomor pengajar (No. 14, 15, 31, 33) merupakan alokasi pengampu program keahlian TJKT, Coding, dan AKL. Data nama lengkap dapat diperbarui secara berkala oleh tim tata usaha sekolah.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wish Wall & Interactive Appreciation Section -->
+    <section id="ucapan" class="py-16 bg-gradient-to-b from-slate-50 via-sky-50 to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="inline-block px-3 py-1 rounded-full bg-rose-100 text-rose-700 text-xs font-bold mb-2">
+                    <i class="fa-solid fa-heart mr-1"></i> Papan Ungkapan Terima Kasih
+                </span>
+                <h3 class="text-3xl font-extrabold text-slate-900">Dinding Ucapan & Apresiasi Siswa</h3>
+                <p class="text-slate-600 text-sm mt-2">Sampaikan pesan hangat, doa, dan kesan manis untuk bapak dan ibu guru tersayang di SMK Tri Dharma Palembang.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-12 gap-8 items-start">
+                <!-- Form Submission Card -->
+                <div id="form-ucapan" class="lg:col-span-5 bg-white rounded-2xl p-6 shadow-xl border border-sky-100 sticky top-24">
+                    <h4 class="text-lg font-bold text-slate-900 mb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-pen-to-square text-brand-600"></i> Kirim Ucapan Kamu
+                    </h4>
+                    <p class="text-xs text-slate-500 mb-5">Pesan kamu akan langsung dipublikasikan di Dinding Apresiasi sekolah.</p>
+
+                    <form @submit.prevent="submitWish()" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nama Kamu (Siswa / Alumni / Ortu)</label>
+                            <input type="text" x-model="form.nama" required placeholder="Contoh: Ahmad Rizky" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Kelas / Jurusan / Angkatan</label>
+                            <input type="text" x-model="form.kelas" placeholder="Contoh: XII TKRO 1 / Alumni 2023" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Ditujukan Kepada Guru</label>
+                            <select x-model="form.tujuan" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none bg-white">
+                                <option value="Semua Guru SMK Tri Dharma Palembang">Semua Guru SMK Tri Dharma Palembang</option>
+                                <template x-for="t in teachers" :key="t.no">
+                                    <option :value="t.nama" x-text="t.nama + ' (' + t.mapel + ')'"></option>
+                                </template>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Pilih Badge Apresiasi</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button type="button" @click="form.badge = '❤️ Guru Paling Menginspirasi'" :class="form.badge.includes('Menginspirasi') ? 'bg-rose-50 border-rose-300 text-rose-700' : 'bg-slate-50 border-slate-200 text-slate-600'" class="p-2 border rounded-lg text-xs font-bold text-left transition">
+                                    ❤️ Menginspirasi
+                                </button>
+                                <button type="button" @click="form.badge = '🌟 Terima Kasih Sabar'" :class="form.badge.includes('Sabar') ? 'bg-amber-50 border-amber-300 text-amber-700' : 'bg-slate-50 border-slate-200 text-slate-600'" class="p-2 border rounded-lg text-xs font-bold text-left transition">
+                                    🌟 Guru Paling Sabar
+                                </button>
+                                <button type="button" @click="form.badge = '🎓 Pahlawan Vokasi'" :class="form.badge.includes('Vokasi') ? 'bg-sky-50 border-sky-300 text-sky-700' : 'bg-slate-50 border-slate-200 text-slate-600'" class="p-2 border rounded-lg text-xs font-bold text-left transition">
+                                    🎓 Pahlawan Vokasi
+                                </button>
+                                <button type="button" @click="form.badge = '🚀 Terus Semangat Pak/Bu'" :class="form.badge.includes('Semangat') ? 'bg-purple-50 border-purple-300 text-purple-700' : 'bg-slate-50 border-slate-200 text-slate-600'" class="p-2 border rounded-lg text-xs font-bold text-left transition">
+                                    🚀 Penuh Semangat
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Pesan Ucapan & Kesan</label>
+                            <textarea x-model="form.pesan" required rows="3" placeholder="Tuliskan ucapan terima kasih dan rasa banggamu untuk bapak/ibu guru..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 bg-gradient-to-r from-brand-600 to-brand-800 hover:from-brand-700 hover:to-brand-900 text-white font-bold text-sm rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane text-amber-300"></i>
+                            <span>Kirim Ucapan Sekarang</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Wishes Wall List -->
+                <div class="lg:col-span-7 space-y-4">
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Pesan Terbaru Dari Siswa</span>
+                        <span class="text-xs text-brand-600 font-semibold" x-text="wishes.length + ' Ucapan Terpublikasi'"></span>
+                    </div>
+
+                    <div class="space-y-4 max-h-[650px] overflow-y-auto pr-2">
+                        <template x-for="(w, idx) in wishes" :key="idx">
+                            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition relative overflow-hidden">
+                                <div class="flex items-start justify-between gap-3 mb-2">
+                                    <div>
+                                        <h5 class="font-bold text-slate-900 text-sm" x-text="w.nama"></h5>
+                                        <p class="text-xs text-slate-500" x-text="w.kelas"></p>
+                                    </div>
+                                    <span class="inline-block px-2.5 py-1 rounded-full bg-sky-50 text-brand-700 text-[11px] font-bold border border-sky-100" x-text="w.badge"></span>
+                                </div>
+
+                                <div class="my-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                    <p class="text-xs font-semibold text-brand-700 mb-1">
+                                        <i class="fa-solid fa-user-check mr-1 text-amber-500"></i> Kepada: <span x-text="w.tujuan"></span>
+                                    </p>
+                                    <p class="text-xs sm:text-sm text-slate-700 leading-relaxed italic" x-text="'“' + w.pesan + '”'"></p>
+                                </div>
+
+                                <div class="flex items-center justify-between text-[11px] text-slate-400">
+                                    <span x-text="w.waktu"></span>
+                                    <button @click="likeWish(w)" class="flex items-center gap-1 text-rose-500 hover:text-rose-600 font-bold">
+                                        <i class="fa-solid fa-heart"></i>
+                                        <span x-text="w.likes"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Lightbox for Teacher Photo Details -->
+    <div x-show="modalOpen" x-transition class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm" style="display: none;">
+        <div @click.away="modalOpen = false" class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-100 relative">
+            <button @click="modalOpen = false" class="absolute top-4 right-4 z-10 w-9 h-9 bg-slate-900/60 hover:bg-slate-900 text-white rounded-full flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="relative h-80 bg-slate-900">
+                <img :src="modalData.photo" :alt="modalData.nama" class="w-full h-full object-cover object-top" onerror="this.src='https://placehold.co/500x600/0284c7/fff?text=Foto+Guru'">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+                <div class="absolute bottom-4 left-6 right-6 text-white">
+                    <span class="inline-block px-3 py-0.5 rounded-full bg-amber-400 text-slate-900 text-xs font-black uppercase mb-1" x-text="modalData.jabatan !== '—' ? modalData.jabatan : 'Dewan Guru'"></span>
+                    <h3 class="text-2xl font-extrabold" x-text="modalData.nama"></h3>
+                    <p class="text-xs text-sky-200" x-text="'Mata Pelajaran: ' + modalData.mapel"></p>
+                </div>
+            </div>
+
+            <div class="p-6">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Pesan & Pengabdian</h4>
+                <p class="text-sm text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100" x-text="modalData.catatan"></p>
+
+                <div class="mt-6 flex gap-3">
+                    <a href="#form-ucapan" @click="modalOpen = false; selectTeacherForWish(modalData.nama)" class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl text-center shadow transition flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-heart text-amber-300"></i> Kirim Ucapan
+                    </a>
+                    <button @click="modalOpen = false" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center pb-8 border-b border-slate-800">
+                <div class="md:col-span-6 flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-2xl bg-white p-1.5 shadow-md flex items-center justify-center">
+                        <img src="1000792510.png" alt="Logo SMK Tri Dharma Palembang" class="max-h-full max-w-full object-contain">
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-white">SMK Tri Dharma Palembang</h4>
+                        <p class="text-xs text-slate-400">Peringatan Hari Guru Nasional • Unggul Dalam Prestasi Vokasi</p>
+                    </div>
+                </div>
+
+                <div class="md:col-span-6 flex flex-wrap md:justify-end gap-6 text-xs text-slate-400">
+                    <a href="#beranda" class="hover:text-amber-400 transition">Beranda</a>
+                    <a href="#pimpinan" class="hover:text-amber-400 transition">Pimpinan</a>
+                    <a href="#galeri" class="hover:text-amber-400 transition">Galeri Foto</a>
+                    <a href="#direktori" class="hover:text-amber-400 transition">36 Guru</a>
+                    <a href="#ucapan" class="hover:text-amber-400 transition">Dinding Apresiasi</a>
+                </div>
+            </div>
+
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
+                <p>© 2026 SMK Tri Dharma Palembang. Selamat Hari Guru Nasional.</p>
+                <p class="mt-2 sm:mt-0 text-slate-400">"Pahlawan Tanpa Tanda Jasa Pembina Generasi Bangsa"</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Alpine.js Application State & Data Script -->
+    <script>
+        function appData() {
+            return {
+                mobileMenu: false,
+                searchQuery: '',
+                selectedCategory: 'semua',
+                viewType: 'grid',
+                modalOpen: false,
+                modalData: { nama: '', jabatan: '', mapel: '', photo: '', catatan: '' },
+                form: {
+                    nama: '',
+                    kelas: '',
+                    tujuan: 'Semua Guru SMK Tri Dharma Palembang',
+                    badge: '❤️ Guru Paling Menginspirasi',
+                    pesan: ''
+                },
+                teachers: [
+                    { no: 1, nama: 'Yulia Andriani, SE, M.Si', jabatan: 'Kepsek', mapel: '—', photo: '1000799652.jpg', cat: 'pimpinan' },
+                    { no: 2, nama: 'Rizqi Maulidia, S.E., Gr', jabatan: 'WK. Kur', mapel: 'Prodi MP', photo: '1000799653.jpg', cat: 'pimpinan' },
+                    { no: 3, nama: 'Anita Lestari, S.Pd., Gr', jabatan: 'WK. Kes', mapel: '—', photo: '1000799654.jpg', cat: 'pimpinan' },
+                    { no: 4, nama: 'Rosalina, S.Pd', jabatan: 'WK. Sapras', mapel: '—', photo: '1000799669.jpg', cat: 'pimpinan' },
+                    { no: 5, nama: 'Putri Nirwana, S.Pd', jabatan: '—', mapel: 'BK (Bimbingan Konseling)', photo: '1000799657.jpg', cat: 'umum' },
+                    { no: 6, nama: 'Fajrin Yuliansyah, S.Pd', jabatan: 'Ka. TKRO', mapel: 'Produktif TKRO', photo: '1000799655.jpg', cat: 'otomotif' },
+                    { no: 7, nama: 'Yulia Rahayu, S.Kom', jabatan: 'Ka. TKJ', mapel: 'Informatika / Produktif TKJ; Mapel Pil Coding', photo: null, cat: 'tkj' },
+                    { no: 8, nama: 'Eni Masitoh, S.Pd', jabatan: 'Ka. MP', mapel: 'Pro MP', photo: null, cat: 'bisnis' },
+                    { no: 9, nama: 'Nur Afni, S.Pd', jabatan: 'Ka. AKL', mapel: 'Prodi AKL', photo: null, cat: 'bisnis' },
+                    { no: 10, nama: 'Fitri Handayani, S.Sos', jabatan: '—', mapel: 'BK (Bimbingan Konseling)', photo: '1000799657.jpg', cat: 'umum' },
+                    { no: 11, nama: 'Nila Puspita Sari, S.Pd', jabatan: '—', mapel: 'BK (Bimbingan Konseling)', photo: '1000799657.jpg', cat: 'umum' },
+                    { no: 12, nama: 'Mochammad Ghazali, S.Pd., Gr', jabatan: 'Ka. TSM', mapel: 'Produktif TSM', photo: '1000799656.jpg', cat: 'otomotif' },
+                    { no: 13, nama: 'Pandi Ahmad, S.Pd', jabatan: '—', mapel: 'Produktif TSM', photo: '1000799656.jpg', cat: 'otomotif' },
+                    { no: 14, nama: 'Guru TJKT (No. 14)', jabatan: '—', mapel: 'TJKT', photo: null, cat: 'tkj' },
+                    { no: 15, nama: 'Guru Mapel Pil Coding (No. 15)', jabatan: '—', mapel: 'Mapel Pil Coding', photo: null, cat: 'tkj' },
+                    { no: 16, nama: 'Lilis Karlina, S.Pd.I., M.Pd', jabatan: '—', mapel: 'Prodi TJKT', photo: '1000799662.jpg', cat: 'tkj' },
+                    { no: 17, nama: 'Wahyudi, S.Pd', jabatan: '—', mapel: 'Mapel Pilihan Coding', photo: '1000799662.jpg', cat: 'tkj' },
+                    { no: 18, nama: 'Sandri Novianti, S.Pd', jabatan: '—', mapel: 'PAI', photo: null, cat: 'umum' },
+                    { no: 19, nama: 'Vionita Apriliyani, S.Pd, Gr', jabatan: '—', mapel: 'PKN', photo: null, cat: 'umum' },
+                    { no: 20, nama: 'Leni Herlina, S.Pd', jabatan: '—', mapel: 'Sejarah', photo: null, cat: 'umum' },
+                    { no: 21, nama: 'Manila, S.Pd', jabatan: '—', mapel: 'B. Indo', photo: null, cat: 'umum' },
+                    { no: 22, nama: 'M. Dinda Akhriansyah Putra, S.Pd', jabatan: '—', mapel: 'B. Indo', photo: null, cat: 'umum' },
+                    { no: 23, nama: 'Ira Rahayu, M.Pd', jabatan: '—', mapel: 'B. Ing Wajib', photo: null, cat: 'umum' },
+                    { no: 24, nama: 'Anna Meilinda, S.Pd', jabatan: '—', mapel: 'B. Ing Wajib', photo: null, cat: 'umum' },
+                    { no: 25, nama: 'Silvi Dwi Handayani, S.Pd', jabatan: '—', mapel: 'B. Inggris Pilihan', photo: null, cat: 'umum' },
+                    { no: 26, nama: 'Dewi Aulia, S.Pd', jabatan: 'Pembina OSIS', mapel: 'MTK', photo: null, cat: 'umum' },
+                    { no: 27, nama: 'Susanti, S.H', jabatan: '—', mapel: 'Seni Budaya / Mulok', photo: null, cat: 'umum' },
+                    { no: 28, nama: 'R.A Nazia, S.Pd', jabatan: '—', mapel: 'IPAS / PKK', photo: null, cat: 'umum' },
+                    { no: 29, nama: 'Audy, S.E', jabatan: '—', mapel: 'PKK', photo: '1000799671.jpg', cat: 'bisnis' },
+                    { no: 30, nama: 'Siti Akbari, SE', jabatan: '—', mapel: 'Prodi MP / PKWU', photo: null, cat: 'bisnis' },
+                    { no: 31, nama: 'Guru Pro AKL (No. 31)', jabatan: '—', mapel: 'Pro AKL', photo: null, cat: 'bisnis' },
+                    { no: 32, nama: 'Tri Anggraini, S.Pd', jabatan: '—', mapel: 'PRO AKL', photo: null, cat: 'bisnis' },
+                    { no: 33, nama: 'Guru Produktif TKJ/Coding (No. 33)', jabatan: '—', mapel: 'Produktif TKJ/Coding', photo: null, cat: 'tkj' },
+                    { no: 34, nama: 'Fakhri Eno, S.Pd', jabatan: '—', mapel: 'Penjas', photo: null, cat: 'umum' },
+                    { no: 35, nama: 'Dwi Retno, S.Pd', jabatan: '—', mapel: 'IPAS / Mapel Pil Coding', photo: null, cat: 'tkj' },
+                    { no: 36, nama: 'Rifkhi Alfairuz, S.Pd', jabatan: '—', mapel: 'Dasprog TO', photo: null, cat: 'otomotif' }
+                ],
+                wishes: [
+                    {
+                        nama: 'Rian Syahputra',
+                        kelas: 'Kelas XII TKRO 1',
+                        tujuan: 'Fajrin Yuliansyah, S.Pd',
+                        badge: '🎓 Pahlawan Vokasi',
+                        pesan: 'Selamat Hari Guru Pak Fajrin! Terima kasih banyak sudah selalu sabar mengajari kami praktek mesin di bengkel TKR sampai kami benar-benar paham.',
+                        waktu: 'Baru saja',
+                        likes: 12
+                    },
+                    {
+                        nama: 'Siti Nurhaliza',
+                        kelas: 'Kelas XI MP 2',
+                        tujuan: 'Rizqi Maulidia, S.E., Gr',
+                        badge: '❤️ Guru Paling Menginspirasi',
+                        pesan: 'Selamat Hari Guru Nasional untuk Ibu Rizqi dan seluruh ibu guru MP! Ilmu manajemen dan ketelitian yang ibu ajarkan sangat bermanfaat.',
+                        waktu: '10 menit lalu',
+                        likes: 8
+                    },
+                    {
+                        nama: 'Bagas Pratama',
+                        kelas: 'Alumni 2024 (TKJ)',
+                        tujuan: 'Yulia Rahayu, S.Kom',
+                        badge: '🚀 Terus Semangat Pak/Bu',
+                        pesan: 'Terima kasih Bu Yulia Rahayu atas bimbingan materi coding & jaringan TKJ! Sekarang ilmu yang ibu berikan kepakai banget di tempat kerja saya.',
+                        waktu: '25 menit lalu',
+                        likes: 15
+                    }
+                ],
+                get filteredTeachers() {
+                    return this.teachers.filter(t => {
+                        const matchesCategory = this.selectedCategory === 'semua' || t.cat === this.selectedCategory || (this.selectedCategory === 'pimpinan' && t.jabatan !== '—');
+                        const query = this.searchQuery.toLowerCase();
+                        const matchesSearch = t.nama.toLowerCase().includes(query) || 
+                                              t.jabatan.toLowerCase().includes(query) || 
+                                              t.mapel.toLowerCase().includes(query) ||
+                                              t.no.toString().includes(query);
+                        return matchesCategory && matchesSearch;
+                    });
+                },
+                openModal(nama, jabatan, mapel, photo, catatan) {
+                    this.modalData = {
+                        nama: nama,
+                        jabatan: jabatan || 'Guru / Staf',
+                        mapel: mapel || 'Mata Pelajaran',
+                        photo: photo || 'https://placehold.co/400x500/0284c7/fff?text=Dewan+Guru',
+                        catatan: catatan || 'Dedikasi tinggi dalam mendidik dan membimbing siswa-siswi SMK Tri Dharma Palembang.'
+                    };
+                    this.modalOpen = true;
+                },
+                selectTeacherForWish(teacherName) {
+                    this.form.tujuan = teacherName;
+                },
+                submitWish() {
+                    if (!this.form.nama || !this.form.pesan) return;
+
+                    // Trigger confetti celebratory effect
+                    if (typeof confetti === 'function') {
+                        confetti({
+                            particleCount: 80,
+                            spread: 70,
+                            origin: { y: 0.6 }
+                        });
+                    }
+
+                    // Add new wish to top of list
+                    this.wishes.unshift({
+                        nama: this.form.nama,
+                        kelas: this.form.kelas || 'Siswa SMK Tri Dharma',
+                        tujuan: this.form.tujuan,
+                        badge: this.form.badge,
+                        pesan: this.form.pesan,
+                        waktu: 'Baru saja',
+                        likes: 1
+                    });
+
+                    // Reset form message
+                    this.form.pesan = '';
+                },
+                likeWish(w) {
+                    w.likes++;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
